@@ -1,0 +1,116 @@
+/* CSS Reset */
+
+/* Apply a more predictable box model */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    /* Include padding and border in the element's total width and height */
+}
+
+/* Remove default margins and set core body defaults */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+    margin: 0;
+    /* Remove default margin */
+    padding: 0;
+    /* Remove default padding */
+    line-height: 1.5;
+    /* Set default line height */
+}
+
+/* Remove list styles and default padding/margin for cleaner lists */
+ul[role='list'],
+ol[role='list'],
+ul,
+li {
+    list-style: none;
+    /* No bullets */
+    margin: 0;
+    /* No margin */
+    padding: 0;
+    /* No padding */
+}
+
+/* Ensure responsive and scalable images and media */
+img,
+picture {
+    max-width: 100%;
+    /* Responsive images */
+    display: block;
+    /* Remove extra space below images */
+    height: auto;
+    /* Maintain aspect ratio */
+}
+
+/* Inherit font settings for form elements */
+input,
+button,
+textarea,
+select {
+    font: inherit;
+    /* Inherit font family and size from parent */
+}
+
+/* Text areas without a specified rows attribute should have a reasonable default size */
+textarea:not([rows]) {
+    min-height: 10em;
+    /* Minimum height for textareas */
+}
+
+/* Remove text size adjustments to prevent inconsistencies in text rendering */
+html {
+    -moz-text-size-adjust: none;
+    /* Firefox */
+    -webkit-text-size-adjust: none;
+    /* Chrome, Safari */
+    text-size-adjust: none;
+    /* Standard */
+}
+
+/* Adjust line heights for better appearance in headings and interactive elements */
+h1,
+h2,
+h3,
+h4,
+button,
+input,
+label {
+    line-height: 1.2;
+    /* Slightly more compact line height for headings and form elements */
+}
+
+/* Style adjustments for all anchor tags */
+a {
+    text-decoration: none;
+    /* No underlines for all anchor tags */
+    color: inherit;
+    /* Inherits text color from parent element */
+    cursor: pointer;
+    /* Explicitly set the pointer cursor for clickable items */
+}
+
+/* Improve accessibility and visibility of elements targeted by URL fragments */
+:target {
+    scroll-margin-top: 5ex;
+    /* Add top margin when an element is targeted to prevent overlap with fixed elements like headers */
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    /* Set default font family */
+    font-size: 16px;
+    /* Set default font size */
+    color: #333;
+    /* Set default text color */
+    background-color: #f5f5f5;
+    /* Set default background color */
+}
