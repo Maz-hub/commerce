@@ -6,13 +6,16 @@ from django.urls import reverse
 from .forms import ListingForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from .models import Listing
 
 
 from .models import User
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    # Filter listings to include only those with 'active' status
+    active_listings = Listing.objects.filter(status='active')
+    return render(request, 'auctions/index.html', {'listings': active_listings})
 
 
 def login_view(request):

@@ -18,15 +18,15 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Active Listings</a>
+                            <a class="nav-link active ms-2" aria-current="page" href="{% url 'index' %}">Active Listings</a>
                         </li>
                         {% if user.is_authenticated %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                                <a class="nav-link ms-2" href="{% url 'logout' %}">Log Out</a>
                             </li>
                         {% else %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                                <a class="nav-link ms-2" href="{% url 'login' %}">Log In</a>
                             </li>
                             <li class="nav-item ms-2 me-2">
                                 <a class="btn btn-success custom-register" href="{% url 'register' %}">Register</a>

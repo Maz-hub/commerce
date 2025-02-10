@@ -2,13 +2,11 @@ body {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     color: #333;
-    background-color: #f5f5f5;
 }
 
-/* Specific styles for the registration button */
+/* registration button */
 .custom-register {
     background-color: #00ff00;
-    /* Lime color for the button */
     border-color: #00ff00;
     color: #333;
 }
@@ -21,10 +19,8 @@ body {
 
 }
 
-/* Styles for the 'Not signed in' message */
+/* 'Not signed in' message */
 .py-2 {
     color: #666;
-    /* Grey color for the text */
     font-size: 0.9rem;
-    /* Smaller font size for the notification */
 }

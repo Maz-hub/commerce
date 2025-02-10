@@ -7,5 +7,9 @@ class ListingForm(forms.ModelForm):
         fields = ['title', 'description', 'starting_bid', 'image_url', 'category']
         widgets = {
             'description': forms.Textarea(attrs={'cols': 80, 'rows': 5}),
-            'category': forms.Select(choices=[(cat.id, cat.name) for cat in Category.objects.all()])
         }
+
+    def __init__(self, *args, **kwargs):
+        super(ListingForm, self).__init__(*args, **kwargs)
+        self.fields['category'].queryset = Category.objects.all()  # Dynamically load the choices
+        self.fields['category'].widget = forms.Select()
