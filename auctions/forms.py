@@ -7,7 +7,9 @@ class ListingForm(forms.ModelForm):
         fields = ['title', 'description', 'starting_bid', 'image_url', 'category']
         widgets = {
             'description': forms.Textarea(attrs={'cols': 80, 'rows': 5}),
+            'image_url': forms.URLInput(attrs={'placeholder': 'http://example.com/image.jpg'}),
         }
+
 
     def __init__(self, *args, **kwargs):
         super(ListingForm, self).__init__(*args, **kwargs)

@@ -13,7 +13,6 @@ from .models import User
 
 
 def index(request):
-    # Filter listings to include only those with 'active' status
     active_listings = Listing.objects.filter(status='active')
     return render(request, 'auctions/index.html', {'listings': active_listings})
 
@@ -76,9 +75,10 @@ def create_listing(request):
     if request.method == 'POST':
         form = ListingForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('index')  # Adjust the redirect as necessary
+            listing = form.save(commit=False)
+            listing.owner = request.user
+            listing.save()
+            return redirect('index')
     else:
         form = ListingForm()
-
     return render(request, 'auctions/create_listing.html', {'form': form})
