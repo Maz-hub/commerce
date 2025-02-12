@@ -7,6 +7,7 @@ from .forms import ListingForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import Listing
+from django.shortcuts import render, get_object_or_404
 
 
 from .models import User
@@ -82,3 +83,8 @@ def create_listing(request):
     else:
         form = ListingForm()
     return render(request, 'auctions/create_listing.html', {'form': form})
+
+
+def listing_detail(request, listing_id):
+    listing = get_object_or_404(Listing, pk=listing_id)
+    return render(request, 'auctions/listing_detail.html', {'listing': listing})
