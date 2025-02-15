@@ -1,10 +1,10 @@
-from django.contrib.auth.models import AbstractUser
-from django.db import models
+from django.contrib.auth.models import AbstractUser # import the AbstractUser class
+from django.db import models # import the models module
+from django.conf import settings # import the settings.py file
 
 # add additional models to this file to represent details about auction listings, bids, comments, and auction categories. 
 # Remember that each time you change anything in auctions/models.py, you’ll need to first run python manage.py makemigrations and then python manage.py migrate to migrate those changes to your database.
 
-# Models: Your application should have at least three models in addition to the User model: one for auction listings, one for bids, and one for comments made on auction listings. It’s up to you to decide what fields each model should have, and what the types of those fields should be. You may have additional models if you would like.
 
 class User(AbstractUser):
     pass
@@ -21,7 +21,7 @@ LISTING_STATUS = (
     ('sold', 'Sold'),
 )
 
-
+# create a Listing model to represent details about auction listings
 class Listing(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -33,7 +33,7 @@ class Listing(models.Model):
     status = models.CharField(choices=LISTING_STATUS, default='active', max_length=10)
 
 
-
+# create a Bid model to represent details about bids placed on auction listings
 class Bid(models.Model):
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bids")
@@ -41,11 +41,19 @@ class Bid(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
+# create a Comment model to represent details about comments made on auction listings
 class Comment(models.Model):
     content = models.TextField()
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="comments")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     created_at = models.DateTimeField(auto_now_add=True)
 
+# track which listings a user has added to their watchlist
+# This model links a user and a listing, indicating that the user has added the listing to their watchlist.
+class Watchlist(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.user.username} - {self.listing.title}"
 
