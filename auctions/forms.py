@@ -1,5 +1,5 @@
 from django import forms
-from .models import Listing, Category
+from .models import Listing, Category, Comment
 from django.core.exceptions import ValidationError
 
 class ListingForm(forms.ModelForm):
@@ -35,3 +35,8 @@ class BidForm(forms.Form):
             if amount <= highest_bid:
                 raise ValidationError(f'The bid must be higher than the current highest bid of ${highest_bid}.')
         return amount
+    
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content']

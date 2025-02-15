@@ -3,14 +3,12 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from .forms import ListingForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .models import Listing
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Listing, Watchlist
-from .forms import BidForm
-from .models import User, Listing, Bid
+from .models import Listing, Watchlist, User, Listing, Bid, Comment
+from .forms import ListingForm, BidForm, CommentForm
+
 
 
 
@@ -97,6 +95,9 @@ def listing_detail(request, listing_id):
     # Check if the listing is on the user's watchlist
     on_watchlist = Watchlist.objects.filter(user=request.user, listing=listing).exists() if request.user.is_authenticated else False
 
+    comments = Comment.objects.filter(listing=listing)
+    comment_form = CommentForm(request.POST or None)
+
     current_bid = Bid.objects.filter(listing=listing).order_by('-amount').first()
     
     # Initialize the bid form
@@ -104,6 +105,7 @@ def listing_detail(request, listing_id):
     
     # Initialize a variable for displaying messages to the user
     message = None
+
 
     # Initialize or fetch the current highest bid
     try:
@@ -155,12 +157,21 @@ def listing_detail(request, listing_id):
             else:
                 message = "Auction is not active and cannot be closed."
 
+        # Handle commenting
+        if 'comment_submit' in request.POST and comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.listing = listing
+            new_comment.user = request.user
+            new_comment.save()
+
         
 
     # Render the page with the current state
     return render(request, 'auctions/listing_detail.html', {
         'listing': listing,
         'on_watchlist': on_watchlist,
+        'comment_form': comment_form,
+        'comments': comments,
         'current_bid': current_bid,
         'bid_form': bid_form if listing.status == 'active' else None,  # Don't show bid form if auction is closed
         'message': message,  # Display messages about actions taken

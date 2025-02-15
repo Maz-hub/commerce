@@ -41,4 +41,20 @@
     {% endif %}
 </div>
 
+<div>
+    <h3>Comments</h3>
+    {% for comment in comments %}
+    <div><strong>{{ comment.user.username }}</strong> commented: {{ comment.content }}</div>
+    {% empty %}
+    <div>No comments yet.</div>
+    {% endfor %}
+    {% if user.is_authenticated %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit" name="comment_submit">Post Comment</button>
+    </form>
+    {% endif %}
+</div>
+
 {% endblock %}
