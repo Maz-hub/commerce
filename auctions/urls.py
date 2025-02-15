@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import watchlist_view
 
 urlpatterns = [
     path("", views.index, name="index"),
@@ -8,5 +9,6 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path("create/", views.create_listing, name="create_listing"),
     path('listing/<int:listing_id>/', views.listing_detail, name='listing_detail'),
+    path('watchlist/', watchlist_view, name='watchlist'),
 
 ]

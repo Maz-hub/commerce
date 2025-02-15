@@ -11,10 +11,6 @@ from .forms import ListingForm, BidForm, CommentForm
 
 
 
-
-from .models import User
-
-
 def index(request):
     active_listings = Listing.objects.filter(status='active')
     return render(request, 'auctions/index.html', {'listings': active_listings})
@@ -86,8 +82,6 @@ def create_listing(request):
     return render(request, 'auctions/create_listing.html', {'form': form})
 
 
-
-
 def listing_detail(request, listing_id):
     # Fetch the listing with the given ID or return a 404 error if not found
     listing = get_object_or_404(Listing, pk=listing_id)
@@ -105,7 +99,6 @@ def listing_detail(request, listing_id):
     
     # Initialize a variable for displaying messages to the user
     message = None
-
 
     # Initialize or fetch the current highest bid
     try:
@@ -177,3 +170,14 @@ def listing_detail(request, listing_id):
         'message': message,  # Display messages about actions taken
   
     })
+
+
+def watchlist_view(request):
+    if not request.user.is_authenticated:
+        # Redirect to login or show an error
+        return redirect('login')
+    
+    # Get all watchlist items for the logged-in user
+    watchlist_items = Watchlist.objects.filter(user=request.user).select_related('listing')
+
+    return render(request, 'auctions/watchlist.html', {'watchlist_items': watchlist_items})
