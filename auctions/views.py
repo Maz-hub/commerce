@@ -10,6 +10,8 @@ from .models import Listing
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Listing, Watchlist
 from .forms import BidForm
+from .models import User, Listing, Bid
+
 
 
 from .models import User
@@ -94,12 +96,35 @@ def listing_detail(request, listing_id):
     
     # Check if the listing is on the user's watchlist
     on_watchlist = Watchlist.objects.filter(user=request.user, listing=listing).exists() if request.user.is_authenticated else False
+
+    current_bid = Bid.objects.filter(listing=listing).order_by('-amount').first()
     
     # Initialize the bid form
     bid_form = BidForm(request.POST or None)
     
     # Initialize a variable for displaying messages to the user
     message = None
+
+    # Initialize or fetch the current highest bid
+    try:
+        current_bid = listing.bids.order_by('-amount').first()
+    except:
+        current_bid = None
+
+    bid_form = BidForm(request.POST or None)
+    message = None
+
+    if request.method == 'POST':
+        if 'place_bid' in request.POST and bid_form.is_valid():
+            bid_amount = bid_form.cleaned_data['bid_amount']
+            if current_bid is None or bid_amount > current_bid.amount:
+                bid = Bid(listing=listing, user=request.user, amount=bid_amount)
+                bid.save()
+                message = "Your bid was successful!"
+                current_bid = bid  # Update current bid to the new highest
+            else:
+                bid_form.add_error(None, 'Your bid must be higher than the current highest bid of $%.2f.' % current_bid.amount)
+                message = 'The bid must be higher than the current highest bid of $%.2f.' % current_bid.amount
 
     if request.method == 'POST':
         # Handle toggling the watchlist status
@@ -130,10 +155,14 @@ def listing_detail(request, listing_id):
             else:
                 message = "Auction is not active and cannot be closed."
 
+        
+
     # Render the page with the current state
     return render(request, 'auctions/listing_detail.html', {
         'listing': listing,
         'on_watchlist': on_watchlist,
+        'current_bid': current_bid,
         'bid_form': bid_form if listing.status == 'active' else None,  # Don't show bid form if auction is closed
-        'message': message  # Display messages about actions taken
+        'message': message,  # Display messages about actions taken
+  
     })

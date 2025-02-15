@@ -5,6 +5,13 @@
     <h2>{{ listing.title }}</h2>
     <p>{{ listing.description }}</p>
     <p><strong>Starting Bid:</strong> ${{ listing.starting_bid }}</p>
+    <p><strong>Current Highest Bid:</strong> 
+        {% if current_bid %}
+            ${{ current_bid.amount }}
+        {% else %}
+            No bids yet.
+        {% endif %}
+    </p>
 
     {% if user.is_authenticated %}
         <form action="" method="post">
@@ -20,10 +27,7 @@
                 <button type="submit" name="close_auction">Close Auction</button>
             {% endif %}
         </form>
-    {% endif %}
-</div>
-<div>
-    {% if user.is_authenticated and listing.status == 'active' %}
+
         <form action="" method="post">
             {% csrf_token %}
             {{ bid_form.as_p }}
