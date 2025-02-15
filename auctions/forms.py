@@ -18,7 +18,6 @@ class ListingForm(forms.ModelForm):
         self.fields['category'].widget = forms.Select()
 
 # ensure the bid is a valid decimal and check that the bid is positive right within the form's validation.
-
 class BidForm(forms.Form):
     bid_amount = forms.DecimalField(decimal_places=2, max_digits=12, label="Your Bid")
 

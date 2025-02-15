@@ -16,14 +16,25 @@
                     Add to Watchlist
                 {% endif %}
             </button>
+            {% if user == listing.owner and listing.status == 'active' %}
+                <button type="submit" name="close_auction">Close Auction</button>
+            {% endif %}
         </form>
     {% endif %}
-    {% if user.is_authenticated %}
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ bid_form.as_p }}
-        <button type="submit" name="place_bid">Place Bid</button>
-    </form>
-{% endif %}
 </div>
+<div>
+    {% if user.is_authenticated and listing.status == 'active' %}
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ bid_form.as_p }}
+            <button type="submit" name="place_bid">Place Bid</button>
+        </form>
+    {% endif %}
+</div>
+<div>
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+</div>
+
 {% endblock %}

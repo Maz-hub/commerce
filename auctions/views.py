@@ -7,9 +7,10 @@ from .forms import ListingForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import Listing
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Listing, Watchlist
 from .forms import BidForm
+
 
 from .models import User
 
@@ -85,23 +86,54 @@ def create_listing(request):
     return render(request, 'auctions/create_listing.html', {'form': form})
 
 
-# check if the listing is currently on the user's watchlist and provide an option to toggle this status. If the 'toggle_watchlist' POST request is sent, it either creates or deletes a Watchlist entry.
+
+
 def listing_detail(request, listing_id):
+    # Fetch the listing with the given ID or return a 404 error if not found
     listing = get_object_or_404(Listing, pk=listing_id)
+    
+    # Check if the listing is on the user's watchlist
     on_watchlist = Watchlist.objects.filter(user=request.user, listing=listing).exists() if request.user.is_authenticated else False
+    
+    # Initialize the bid form
     bid_form = BidForm(request.POST or None)
+    
+    # Initialize a variable for displaying messages to the user
+    message = None
 
-    if request.method == 'POST' and 'place_bid' in request.POST:
-        if bid_form.is_valid():
-            bid_amount = bid_form.cleaned_data['bid_amount']
-            if bid_amount > listing.starting_bid and (not listing.bids.exists() or bid_amount > listing.bids.latest('amount').amount):
-                bid = Bid(listing=listing, user=request.user, amount=bid_amount)
-                bid.save()
+    if request.method == 'POST':
+        # Handle toggling the watchlist status
+        if 'toggle_watchlist' in request.POST:
+            if on_watchlist:
+                Watchlist.objects.filter(user=request.user, listing=listing).delete()
+                on_watchlist = False
             else:
-                bid_form.add_error(None, 'Your bid must be higher than the current bid.')
+                Watchlist.objects.create(user=request.user, listing=listing)
+                on_watchlist = True
+        
+        # Handle bid submissions
+        if 'place_bid' in request.POST:
+            if bid_form.is_valid():
+                bid_amount = bid_form.cleaned_data['bid_amount']
+                # Ensure the bid is higher than the starting bid and all previous bids
+                if bid_amount > listing.starting_bid and (not listing.bids.exists() or bid_amount > listing.bids.latest('amount').amount):
+                    Bid.objects.create(listing=listing, user=request.user, amount=bid_amount)
+                else:
+                    bid_form.add_error(None, 'Your bid must be higher than the current bid.')
 
+        # Handle closing the auction
+        if 'close_auction' in request.POST and request.user == listing.owner:
+            if listing.status == 'active':
+                listing.status = 'closed'
+                listing.save()
+                message = "Auction has been closed."
+            else:
+                message = "Auction is not active and cannot be closed."
+
+    # Render the page with the current state
     return render(request, 'auctions/listing_detail.html', {
         'listing': listing,
         'on_watchlist': on_watchlist,
-        'bid_form': bid_form
+        'bid_form': bid_form if listing.status == 'active' else None,  # Don't show bid form if auction is closed
+        'message': message  # Display messages about actions taken
     })
