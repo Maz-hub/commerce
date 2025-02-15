@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect
 from .models import Listing
 from django.shortcuts import render, get_object_or_404
 from .models import Listing, Watchlist
-
+from .forms import BidForm
 
 from .models import User
 
@@ -88,20 +88,20 @@ def create_listing(request):
 # check if the listing is currently on the user's watchlist and provide an option to toggle this status. If the 'toggle_watchlist' POST request is sent, it either creates or deletes a Watchlist entry.
 def listing_detail(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
-    on_watchlist = False
-    
-    if request.user.is_authenticated:
-        on_watchlist = Watchlist.objects.filter(user=request.user, listing=listing).exists()
+    on_watchlist = Watchlist.objects.filter(user=request.user, listing=listing).exists() if request.user.is_authenticated else False
+    bid_form = BidForm(request.POST or None)
 
-        if 'toggle_watchlist' in request.POST:
-            if on_watchlist:
-                Watchlist.objects.get(user=request.user, listing=listing).delete()
-                on_watchlist = False
+    if request.method == 'POST' and 'place_bid' in request.POST:
+        if bid_form.is_valid():
+            bid_amount = bid_form.cleaned_data['bid_amount']
+            if bid_amount > listing.starting_bid and (not listing.bids.exists() or bid_amount > listing.bids.latest('amount').amount):
+                bid = Bid(listing=listing, user=request.user, amount=bid_amount)
+                bid.save()
             else:
-                Watchlist.objects.create(user=request.user, listing=listing)
-                on_watchlist = True
+                bid_form.add_error(None, 'Your bid must be higher than the current bid.')
 
     return render(request, 'auctions/listing_detail.html', {
         'listing': listing,
-        'on_watchlist': on_watchlist
+        'on_watchlist': on_watchlist,
+        'bid_form': bid_form
     })

@@ -18,6 +18,12 @@
             </button>
         </form>
     {% endif %}
-    <!-- More functionalities will be added here -->
+    {% if user.is_authenticated %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ bid_form.as_p }}
+        <button type="submit" name="place_bid">Place Bid</button>
+    </form>
+{% endif %}
 </div>
 {% endblock %}
