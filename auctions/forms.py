@@ -14,8 +14,10 @@ class ListingForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ListingForm, self).__init__(*args, **kwargs)
-        self.fields['category'].queryset = Category.objects.all()  # Dynamically load the choices
+        self.fields['category'].queryset = Category.objects.all()  # Ensure this is set even if not using dynamic loading initially
         self.fields['category'].widget = forms.Select()
+        # Ensure the queryset is refreshed every time the form is instantiated
+        self.fields['category'].queryset = Category.objects.all()
 
 class BidForm(forms.Form):
     bid_amount = forms.DecimalField(decimal_places=2, max_digits=12, label="Your Bid")

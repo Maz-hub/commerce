@@ -7,7 +7,6 @@
     <h2 class="mb-4 lead">Create New Listing</h2>
     <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
         {% csrf_token %}
-        {{ form.as_p }}
         <div class="mb-3">
             <label for="title" class="form-label"></label>
             {{ form.title|as_crispy_field }}

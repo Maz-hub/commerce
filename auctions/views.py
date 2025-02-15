@@ -65,10 +65,9 @@ def register(request):
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
     else:
-        return render(request, "auctions/register.html")
-    
+        return render(request, "auctions/register.html")    
 
-# @login_required
+@login_required
 def create_listing(request):
     if request.method == 'POST':
         form = ListingForm(request.POST)
