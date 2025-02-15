@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import Listing
 from django.shortcuts import render, get_object_or_404
+from .models import Listing, Watchlist
 
 
 from .models import User
@@ -71,7 +72,6 @@ def register(request):
     
 
 # @login_required
-
 def create_listing(request):
     if request.method == 'POST':
         form = ListingForm(request.POST)
@@ -85,6 +85,23 @@ def create_listing(request):
     return render(request, 'auctions/create_listing.html', {'form': form})
 
 
+# check if the listing is currently on the user's watchlist and provide an option to toggle this status. If the 'toggle_watchlist' POST request is sent, it either creates or deletes a Watchlist entry.
 def listing_detail(request, listing_id):
     listing = get_object_or_404(Listing, pk=listing_id)
-    return render(request, 'auctions/listing_detail.html', {'listing': listing})
+    on_watchlist = False
+    
+    if request.user.is_authenticated:
+        on_watchlist = Watchlist.objects.filter(user=request.user, listing=listing).exists()
+
+        if 'toggle_watchlist' in request.POST:
+            if on_watchlist:
+                Watchlist.objects.get(user=request.user, listing=listing).delete()
+                on_watchlist = False
+            else:
+                Watchlist.objects.create(user=request.user, listing=listing)
+                on_watchlist = True
+
+    return render(request, 'auctions/listing_detail.html', {
+        'listing': listing,
+        'on_watchlist': on_watchlist
+    })
