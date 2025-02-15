@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Listing, Watchlist, User, Listing, Bid, Comment
+from .models import Listing, Watchlist, User, Listing, Bid, Comment, Category
 from .forms import ListingForm, BidForm, CommentForm
 
 
@@ -181,3 +181,14 @@ def watchlist_view(request):
     watchlist_items = Watchlist.objects.filter(user=request.user).select_related('listing')
 
     return render(request, 'auctions/watchlist.html', {'watchlist_items': watchlist_items})
+
+
+def category_list(request):
+    categories = Category.objects.all()
+    return render(request, 'auctions/category_list.html', {'categories': categories})
+
+
+def category_detail(request, category_id):
+    category = get_object_or_404(Category, pk=category_id)
+    listings = Listing.objects.filter(category=category, status='active')
+    return render(request, 'auctions/category_detail.html', {'category': category, 'listings': listings})
