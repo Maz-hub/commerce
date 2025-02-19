@@ -3,25 +3,33 @@
 
 
 {% block body %}
+<div class="banner bg-light p-3 text-center">
+    <h1 class="text-primary-emphasis">Active Listings</h1>
+    <p class="text-primary-emphasis">Discover unique items and get great deals!</p>
+</div>
+
 <div class="container mt-4">
-    <h1>Active Listings</h1>
     <div class="row">
         {% for listing in listings %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100"> <!-- h-100 makes sure all cards are the same height -->
-                {% if listing.image_url %}
-                <img src="{{ listing.image_url }}" class="card-img-top" alt="{{ listing.title }}">
-                {% else %}
-                <img src="{% static 'images/default-image.jpg' %}" class="card-img-top" alt="Default Image">
-                {% endif %}
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">{{ listing.title }}</h5>
-                    <p class="card-text">{{ listing.description|truncatewords:20 }}</p>
-                    <p class="card-text"><strong>Starting Bid:</strong> ${{ listing.starting_bid }}</p>
-                    
+        <div class="col-6 col-sm-4">
+            <a href="{% url 'listing_detail' listing.id %}" class="text-decoration-none">
+                <div class="card h-100">
+                    <div class="ratio ratio-1x1"> 
+                    {% if listing.image_url %}
+                    <img src="{{ listing.image_url }}" class="thumbnail" alt="{{ listing.title }}">
+                    {% else %}
+                    <img src="{% static 'images/default-image.jpg' %}" class="card-img-top" alt="Default Image">
+                    {% endif %}
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <p class="lead">{{ listing.title }}</p>
+                        <p>{{ listing.description|truncatewords:10 }}</p>
+                        <p><strong>Starting Bid:</strong> ${{ listing.starting_bid }}</p>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
+        
         {% empty %}
         <div class="col">
             <p>No active listings available.</p>
