@@ -2,23 +2,40 @@
 
 {% block body %}
 
-    <h2>Login</h2>
-
     {% if message %}
         <div>{{ message }}</div>
     {% endif %}
+    
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="text-center mb-4">
+                    <h3>Sign in to your account</h3>
+                </div>
+    
+                <form action="{% url 'login' %}" method="post" class="form-signin">
+                    {% csrf_token %}
+                    <div class="form-outline mb-4">
+                        <input autofocus class="form-control" type="text" name="username" placeholder="Email or username" required>
+                        <div class="invalid-feedback">
+                            Please enter username.
+                        </div>
+                    </div>
+                    <div class="form-outline mb-4">
+                        <input class="form-control" type="password" name="password" placeholder="Password" required>
+                        <div class="invalid-feedback">
+                            Please enter your password.
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-info btn-lg btn-block form-control">Login</button>
 
-    <form action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <input autofocus class="form-control" type="text" name="username" placeholder="Username">
+                    <p class="mt-5 text-center">New to <span class="fw-bold text-warning">A</span>uctions? <a href="{% url 'register' %}">Create account</a></p>
+                </form>
+            </div>
         </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="Password">
-        </div>
-        <input class="btn btn-primary" type="submit" value="Login">
-    </form>
+    </div>
+    
 
-    Don't have an account? <a href="{% url 'register' %}">Register here.</a>
+    
 
 {% endblock %}

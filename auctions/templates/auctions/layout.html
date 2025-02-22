@@ -24,7 +24,7 @@
             </div>
         </nav>
         
-        <nav class="navbar navbar-expand-lg bg-primary ps-3 pe-3" data-bs-theme="dark">
+        <nav class="navbar navbar-expand-lg bg-primary ps-3 pe-5" data-bs-theme="dark">
             <div class="container-fluid">
                 <a class="navbar-brand text-decoration-none fs-3" href="{% url 'index' %}"><span class="fw-bold text-warning">A</span>uctions</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,8 +36,10 @@
                             <a class="nav-link" href="{% url 'create_listing' %}">Sell</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'watchlist' %}">Watchlist</a>
-                        </li>
+                            <a class="nav-link" href="{% url 'watchlist' %}">
+                                Watchlist <span class="badge rounded-pill bg-warning ms-2">{{ watchlist_count }}</span>
+                            </a>
+                        </li>                        
                     </ul>
                 </div>
             </div>

@@ -37,10 +37,10 @@
     <h2 class="text-center mb-4">Active Listings</h2>
     <div class="row">
         {% for listing in listings %}
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
             <a href="{% url 'listing_detail' listing.id %}" class="text-decoration-none">
                 <div class="card h-100">
-                    <div class="ratio ratio-1x1"> 
+                    <div class="ratio ratio-1x1 img-fluid"> 
                     {% if listing.image_url %}
                     <img src="{{ listing.image_url }}" class="thumbnail" alt="{{ listing.title }}">
                     {% else %}
@@ -48,9 +48,9 @@
                     {% endif %}
                     </div>
                     <div class="card-body d-flex flex-column">
-                        <p class="lead">{{ listing.title }}</p>
-                        <p>{{ listing.description|truncatewords:10 }}</p>
-                        <p><strong>Starting Bid:</strong> ${{ listing.starting_bid }}</p>
+                        <p class="text-primary-emphasis">{{ listing.title }}</p>
+                        <!--<p>{{ listing.description|truncatewords:10 }}</p>-->
+                        <p class="text-primary"><strong>Starting Bid:</strong> ${{ listing.starting_bid }}</p>
                     </div>
                 </div>
             </a>

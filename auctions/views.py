@@ -195,3 +195,10 @@ def category_detail(request, category_id):
     category = get_object_or_404(Category, pk=category_id)
     listings = Listing.objects.filter(category=category, status='active')
     return render(request, 'auctions/category_detail.html', {'category': category, 'listings': listings})
+
+
+def watchlist_count(request):
+    count = 0
+    if request.user.is_authenticated:
+        count = Watchlist.objects.filter(user=request.user).count()
+    return {'watchlist_count': count}
