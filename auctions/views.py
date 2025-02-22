@@ -13,7 +13,11 @@ from .forms import ListingForm, BidForm, CommentForm
 
 def index(request):
     active_listings = Listing.objects.filter(status='active')
-    return render(request, 'auctions/index.html', {'listings': active_listings})
+    categories = Category.objects.all()
+    return render(request, 'auctions/index.html', {
+        'listings': active_listings,
+        'categories': categories 
+    })
 
 
 def login_view(request):
