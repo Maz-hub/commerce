@@ -6,46 +6,54 @@
         <div>{{ message }}</div>
     {% endif %}
 
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="text-center mb-4">
-                    <h3>Create your account</h3>
-                    <p class="text-muted">Join and start bidding today!</p>
+    <section>
+        <div class="container mt-5 pt-5">
+            <div class="row">
+                <div class="col-12 col-sm-8 col-md-6 m-auto">
+                    <div class="card border-0 shadow rounded">
+                        <div class="card-header text-center py-5">
+                            <h3>Create your account</h3>
+                            <p class="text-muted">Join and start bidding today!</p>
+                            <div class="card-body">
+                                <form action="{% url 'register' %}" method="post" class="form-signin">
+                                    {% csrf_token %}
+                                    <div class="form-outline mb-4">
+                                        <input class="form-control" autofocus type="text" name="username" placeholder="Username" required>
+                                        <div class="invalid-feedback">
+                                            Please choose a username.
+                                        </div>
+                                    </div>
+                                    <div class="form-outline mb-4">
+                                        <input class="form-control" type="email" name="email" placeholder="Email Address" required>
+                                        <div class="invalid-feedback">
+                                            Please enter a valid email address.
+                                        </div>
+                                    </div>
+                                    <div class="form-outline mb-4">
+                                        <input class="form-control" type="password" name="password" placeholder="Password" required>
+                                        <div class="invalid-feedback">
+                                            Please enter a password.
+                                        </div>
+                                    </div>
+                                    <div class="form-outline mb-4">
+                                        <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password" required>
+                                        <div class="invalid-feedback">
+                                            Please confirm your password.
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-info btn-lg btn-block form-control">Register</button>
+                    
+                                    <p class="mt-4 text-center">Already have an account? <a href="{% url 'login' %}">Log in here</a>.</p>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-    
-                <form action="{% url 'register' %}" method="post" class="form-signin">
-                    {% csrf_token %}
-                    <div class="form-outline mb-4">
-                        <input class="form-control" autofocus type="text" name="username" placeholder="Username" required>
-                        <div class="invalid-feedback">
-                            Please choose a username.
-                        </div>
-                    </div>
-                    <div class="form-outline mb-4">
-                        <input class="form-control" type="email" name="email" placeholder="Email Address" required>
-                        <div class="invalid-feedback">
-                            Please enter a valid email address.
-                        </div>
-                    </div>
-                    <div class="form-outline mb-4">
-                        <input class="form-control" type="password" name="password" placeholder="Password" required>
-                        <div class="invalid-feedback">
-                            Please enter a password.
-                        </div>
-                    </div>
-                    <div class="form-outline mb-4">
-                        <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password" required>
-                        <div class="invalid-feedback">
-                            Please confirm your password.
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-info btn-lg btn-block form-control">Register</button>
-    
-                    <p class="mt-4 text-center">Already have an account? <a href="{% url 'login' %}">Log in here</a>.</p>
-                </form>
             </div>
         </div>
-    </div>
+    </section>
+    
+
+
 
 {% endblock %}
