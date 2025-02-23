@@ -1,17 +1,13 @@
-{% extends "auctions/layout.html" %}
-{% load static %}
-
-
-{% block body %}
+{% extends "auctions/layout.html" %} {% load static %} {% block body %}
 
 <!-- Categories -->
 <div class="container mt-4">
     <div class="row">
         <div class="col">
             {% for category in categories %}
-                <a href="{% url 'category_detail' category.id %}" class="btn btn-outline-primary me-2 mb-2">
-                    {{ category.name }}
-                </a>
+            <a href="{% url 'category_detail' category.id %}" class="btn btn-outline-primary me-2 mb-2">
+                {{ category.name }}
+            </a>
             {% endfor %}
         </div>
     </div>
@@ -19,8 +15,13 @@
 
 <!-- Banner -->
 <div class="banner-background position-relative text-center my-4">
-    <div style="height: 25rem; overflow: hidden;" class="rounded">
-        <img src="{% static 'img/online-shopping.jpg' %}" class="img-fluid" alt="Online Shopping" style="min-height: 100%; min-width: 100%; object-fit: cover; object-position: center;">
+    <div style="height: 25rem; overflow: hidden" class="rounded">
+        <img src="{% static 'img/online-shopping.jpg' %}" class="img-fluid" alt="Online Shopping" style="
+        min-height: 100%;
+        min-width: 100%;
+        object-fit: cover;
+        object-position: center;
+      " />
     </div>
     <div class="position-absolute top-0 start-0 end-0 bottom-0 bg-dark bg-opacity-10">
         <div class="d-flex justify-content-center align-items-center h-100">
@@ -31,36 +32,46 @@
     </div>
 </div>
 
-<!-- Listings -->
-<div class="container mt-5">
-    <hr class="my-4">
-    <h2 class="text-center mb-4">Active Listings</h2>
-    <div class="row">
-        {% for listing in listings %}
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-            <a href="{% url 'listing_detail' listing.id %}" class="text-decoration-none">
-                <div class="card h-100">
-                    <div class="ratio ratio-1x1 img-fluid"> 
-                    {% if listing.image_url %}
-                    <img src="{{ listing.image_url }}" class="thumbnail" alt="{{ listing.title }}">
-                    {% else %}
-                    <img src="{% static 'images/default-image.jpg' %}" class="card-img-top" alt="Default Image">
-                    {% endif %}
-                    </div>
-                    <div class="card-body d-flex flex-column">
-                        <p class="text-primary-emphasis">{{ listing.title }}</p>
-                        <!--<p>{{ listing.description|truncatewords:10 }}</p>-->
-                        <p class="text-primary"><strong>Starting Bid:</strong> ${{ listing.starting_bid }}</p>
-                    </div>
-                </div>
-            </a>
-        </div>
-        
-        {% empty %}
-        <div class="col">
-            <p>No active listings available.</p>
-        </div>
-        {% endfor %}
+<!-- Title -->
+<section>
+    <div class="container my-5">
+        <h2 class="text-center">Active Listings</h2>
     </div>
-</div>
+</section>
+
+<!-- Active Listings -->
+<section>
+    <div class="container my-5">
+        <div class="row">
+            {% for listing in listings %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                <a href="{% url 'listing_detail' listing.id %}" class="text-decoration-none">
+                    <div class="card shadow-sm">
+                        <div class="card-img-top" style="height: 20rem; overflow: hidden">
+                            {% if listing.image_url %}
+                            <img src="{{ listing.image_url }}" class="img-fluid"
+                                style="min-height: 100%; min-width: 100%; object-fit: scale-down; object-position: center;"
+                                alt="{{ listing.title }}">
+                            {% else %}
+                            <img src="{% static 'img/no-image.jpg' %}" class="img-fluid" alt="Default Image">
+                            {% endif %}
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <p class="text-primary-emphasis">{{ listing.title }}</p>
+                            <p class="text-primary">
+                                <strong>Starting Bid:</strong> ${{ listing.starting_bid }}
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p>No active listings available.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
 {% endblock %}
