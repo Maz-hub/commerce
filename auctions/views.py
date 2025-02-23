@@ -125,7 +125,7 @@ def listing_detail(request, listing_id):
                 message = 'The bid must be higher than the current highest bid of $%.2f.' % current_bid.amount
 
     if request.method == 'POST':
-        # Handle toggling the watchlist status
+        # toggling the watchlist status
         if 'toggle_watchlist' in request.POST:
             if on_watchlist:
                 Watchlist.objects.filter(user=request.user, listing=listing).delete()
@@ -134,7 +134,7 @@ def listing_detail(request, listing_id):
                 Watchlist.objects.create(user=request.user, listing=listing)
                 on_watchlist = True
         
-        # Handle bid submissions
+        # bid submissions
         if 'place_bid' in request.POST:
             if bid_form.is_valid():
                 bid_amount = bid_form.cleaned_data['bid_amount']

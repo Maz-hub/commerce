@@ -1,11 +1,61 @@
-{% extends 'auctions/layout.html' %}
-
-{% block body %}
-<h2>Listings in {{ category.name }}</h2>
-<div class="listings-container">
+{% extends 'auctions/layout.html' %} {% block body %}
+<div class="container mt-4">
+  <h2 class="mb-4">Listings in {{ category.name }}</h2>
+  <div class="row">
     {% for listing in listings %}
-    <div class="listing">
-        <h3><a href="{% url 'listing_detail' listing.id %}">{{ listing.title }}</a></h3>
-        <p>{{ listing.description|truncatewords:20}}</p> <p><strong>Starting Bid:</strong> ${{ listing.starting_bid }}</p> </div> {% empty %} <p>No active listings in this category.</p> {% endfor %}
-
-    </div> {% endblock %} 
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="card h-100 shadow-sm">
+        <!-- Thumbnail Image -->
+        <div
+          class="card-img-top"
+          style="
+            height: 200px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          "
+        >
+          {% if listing.image_url %}
+          <img
+            src="{{ listing.image_url }}"
+            class="img-fluid"
+            style="max-height: 100%; max-width: 100%; object-fit: contain"
+            alt="{{ listing.title }}"
+          />
+          {% else %}
+          <img
+            src="https://via.placeholder.com/300x200"
+            class="img-fluid"
+            style="max-height: 100%; max-width: 100%; object-fit: contain"
+            alt="No Image Available"
+          />
+          {% endif %}
+        </div>
+        <!-- Card Body -->
+        <div class="card-body d-flex flex-column">
+          <h3 class="card-title">
+            <a
+              href="{% url 'listing_detail' listing.id %}"
+              class="text-decoration-none"
+            >
+              {{ listing.title }}
+            </a>
+          </h3>
+          <p class="card-text">{{ listing.description|truncatewords:20 }}</p>
+          <p class="text-primary">
+            <strong>Starting Bid:</strong> ${{ listing.starting_bid }}
+          </p>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+      <div class="alert alert-info" role="alert">
+        No active listings in this category.
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

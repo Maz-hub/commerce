@@ -26,7 +26,7 @@
           <h3 class="card-title">
             <a
               href="{% url 'listing_detail' item.listing.id %}"
-              class="text-decoration-none text-dark"
+              class="text-decoration-none"
             >
               {{ item.listing.title }}
             </a>
@@ -38,7 +38,7 @@
         <div class="card-footer bg-transparent border-0">
           <a
             href="{% url 'listing_detail' item.listing.id %}"
-            class="btn btn-primary btn-sm"
+            class="btn btn-primary btn-sm mb-3"
           >
             View Listing
           </a>
