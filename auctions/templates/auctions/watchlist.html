@@ -1,15 +1,57 @@
-{% extends 'auctions/layout.html' %}
-
-{% block body %}
-<h2>Your Watchlist</h2>
-<div class="listings-container">
+{% extends 'auctions/layout.html' %} {% block body %}
+<div class="container mt-4">
+  <h2 class="mb-4">Watched Listings</h2>
+  <div class="row">
     {% for item in watchlist_items %}
-    <div class="listing">
-        <h3><a href="{% url 'listing_detail' item.listing.id %}">{{ item.listing.title }}</a></h3>
-        <p>{{ item.listing.description|truncatewords:20 }}</p>
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="card h-100 shadow-sm">
+        <!-- Thumbnail Image -->
+        {% if item.listing.image_url %}
+        <img
+          src="{{ item.listing.image_url }}"
+          class="card-img-top"
+          alt="{{ item.listing.title }}"
+          style="height: 200px; object-fit: cover"
+        />
+        {% else %}
+        <img
+          src="https://via.placeholder.com/300x200"
+          class="card-img-top"
+          alt="No Image Available"
+          style="height: 200px; object-fit: cover"
+        />
+        {% endif %}
+
+        <div class="card-body">
+          <h3 class="card-title">
+            <a
+              href="{% url 'listing_detail' item.listing.id %}"
+              class="text-decoration-none text-dark"
+            >
+              {{ item.listing.title }}
+            </a>
+          </h3>
+          <p class="card-text">
+            {{ item.listing.description|truncatewords:20 }}
+          </p>
+        </div>
+        <div class="card-footer bg-transparent border-0">
+          <a
+            href="{% url 'listing_detail' item.listing.id %}"
+            class="btn btn-primary btn-sm"
+          >
+            View Listing
+          </a>
+        </div>
+      </div>
     </div>
     {% empty %}
-    <p>You have no items in your watchlist.</p>
+    <div class="col-12">
+      <div class="alert alert-info" role="alert">
+        You have no items in your watchlist.
+      </div>
+    </div>
     {% endfor %}
+  </div>
 </div>
 {% endblock %}

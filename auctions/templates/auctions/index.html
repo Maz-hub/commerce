@@ -44,18 +44,20 @@
     <div class="container my-5">
         <div class="row">
             {% for listing in listings %}
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-                <a href="{% url 'listing_detail' listing.id %}" class="text-decoration-none">
-                    <div class="card shadow-sm">
-                        <div class="card-img-top" style="height: 20rem; overflow: hidden">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                <a href="{% url 'listing_detail' listing.id %}" class="text-decoration-none text-dark">
+                    <div class="card h-100 shadow-sm">
+                        <!-- Thumbnail Image -->
+                        <div class="card-img-top" style="height: 200px; overflow: hidden;">
                             {% if listing.image_url %}
-                            <img src="{{ listing.image_url }}" class="img-fluid"
-                                style="min-height: 100%; min-width: 100%; object-fit: scale-down; object-position: center;"
-                                alt="{{ listing.title }}">
+                            <img src="{{ listing.image_url }}" class="img-fluid h-100 w-100"
+                                style="object-fit: contain;" alt="{{ listing.title }}">
                             {% else %}
-                            <img src="{% static 'img/no-image.jpg' %}" class="img-fluid" alt="Default Image">
+                            <img src="{% static 'img/no-image.jpg' %}" class="img-fluid h-100 w-100"
+                                style="object-fit: contain;" alt="Default Image">
                             {% endif %}
                         </div>
+                        <!-- Card Body -->
                         <div class="card-body d-flex flex-column">
                             <p class="text-primary-emphasis">{{ listing.title }}</p>
                             <p class="text-primary">
