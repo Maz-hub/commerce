@@ -103,29 +103,34 @@ def listing_detail(request, listing_id):
     # Initialize a variable for displaying messages to the user
     message = None
 
-    # Initialize or fetch the current highest bid
-    try:
-        current_bid = listing.bids.order_by('-amount').first()
-    except:
-        current_bid = None
-
-    bid_form = BidForm(request.POST or None)
-    message = None
-
     if request.method == 'POST':
-        if 'place_bid' in request.POST and bid_form.is_valid():
-            bid_amount = bid_form.cleaned_data['bid_amount']
-            if current_bid is None or bid_amount > current_bid.amount:
-                bid = Bid(listing=listing, user=request.user, amount=bid_amount)
-                bid.save()
-                message = "Your bid was successful!"
-                current_bid = bid  # Update current bid to the new highest
+        # Bid submissions
+        if 'place_bid' in request.POST:
+            bid_form = BidForm(request.POST)
+            if bid_form.is_valid():
+                bid_amount = bid_form.cleaned_data['bid_amount']
+                
+                # Ensure that the bid is higher than the starting bid
+                if bid_amount < listing.starting_bid:
+                    bid_form.add_error(None, f'Your bid must be higher than the starting bid of ${listing.starting_bid:.2f}.')
+                    message = f'Your bid must be higher than the starting bid of ${listing.starting_bid:.2f}.'
+                
+                # Ensure that the bid is higher than the current highest bid
+                elif current_bid is not None and bid_amount <= current_bid.amount:
+                    bid_form.add_error(None, f'Your bid must be higher than the current highest bid of ${current_bid.amount:.2f}.')
+                    message = f'Your bid must be higher than the current highest bid of ${current_bid.amount:.2f}.'
+                
+                # If the bid is valid, save it
+                else:
+                    bid = Bid(listing=listing, user=request.user, amount=bid_amount)
+                    bid.save()
+                    message = "Your bid was successful!"
+                    current_bid = bid  # Update current bid to the new highest
             else:
-                bid_form.add_error(None, 'Your bid must be higher than the current highest bid of $%.2f.' % current_bid.amount)
-                message = 'The bid must be higher than the current highest bid of $%.2f.' % current_bid.amount
+                # Invalid form submission
+                message = "Invalid bid amount. Please enter a valid number."
 
-    if request.method == 'POST':
-        # toggling the watchlist status
+        # Toggle the watchlist status
         if 'toggle_watchlist' in request.POST:
             if on_watchlist:
                 Watchlist.objects.filter(user=request.user, listing=listing).delete()
@@ -134,17 +139,7 @@ def listing_detail(request, listing_id):
                 Watchlist.objects.create(user=request.user, listing=listing)
                 on_watchlist = True
         
-        # bid submissions
-        if 'place_bid' in request.POST:
-            if bid_form.is_valid():
-                bid_amount = bid_form.cleaned_data['bid_amount']
-                # Ensure the bid is higher than the starting bid and all previous bids
-                if bid_amount > listing.starting_bid and (not listing.bids.exists() or bid_amount > listing.bids.latest('amount').amount):
-                    Bid.objects.create(listing=listing, user=request.user, amount=bid_amount)
-                else:
-                    bid_form.add_error(None, 'Your bid must be higher than the current bid.')
-
-        # Handle closing the auction
+        # Closing the auction
         if 'close_auction' in request.POST and request.user == listing.owner:
             if listing.status == 'active':
                 listing.status = 'closed'
@@ -153,26 +148,24 @@ def listing_detail(request, listing_id):
             else:
                 message = "Auction is not active and cannot be closed."
 
-        # Handle commenting
+        # Commenting
         if 'comment_submit' in request.POST and comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
             new_comment.listing = listing
             new_comment.user = request.user
             new_comment.save()
 
-        
-
-    # Render the page with the current state
     return render(request, 'auctions/listing_detail.html', {
         'listing': listing,
         'on_watchlist': on_watchlist,
         'comment_form': comment_form,
         'comments': comments,
         'current_bid': current_bid,
-        'bid_form': bid_form if listing.status == 'active' else None,  # Don't show bid form if auction is closed
-        'message': message,  # Display messages about actions taken
-  
+        'bid_form': bid_form if listing.status == 'active' else None,
+        'message': message,
     })
+
+
 
 
 def watchlist_view(request):
