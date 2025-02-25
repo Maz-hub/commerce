@@ -1,152 +1,186 @@
 {% extends 'auctions/layout.html' %} {% load static %} {% block body %}
 <section>
-    <div class="container mt-5">
-        <div class="row">
-            <!-- Image -->
-            <div class="col-md-6 mb-4">
-                <div class="card" style="border: none">
-                    <div class="card-img-top" style="
+  <div class="container mt-5">
+    <div class="row">
+      <!-- Image -->
+      <div class="col-md-6 mb-4">
+        <div class="card" style="border: none">
+          <div
+            class="card-img-top"
+            style="
               height: 20rem;
               overflow: hidden;
               display: flex;
               justify-content: center;
               align-items: center;
-            ">
-                        {% if listing.image_url %}
-                        <img src="{{ listing.image_url }}" class="img-fluid"
-                            style="max-width: 100%; max-height: 100%; object-fit: contain" alt="{{ listing.title }}" />
-                        {% else %}
-                        <img src="{% static 'img/no-image.jpg' %}" class="img-fluid"
-                            style="max-width: 100%; max-height: 100%; object-fit: contain" alt="Default Image" />
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            <!-- Details -->
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <h2>{{ listing.title }}</h2>
-                </div>
-                <p class="h6 text-info-emphasis">
-                    <strong>Current Highest Bid:</strong>
-                    {% if current_bid %} ${{ current_bid.amount }} {% else %} No bids
-                    yet. {% endif %}
-                </p>
-                <div>
-                    <div class="mb-3">
-                        <p class="h6 text-info-emphasis me-2">
-                            <strong>Starting Bid:</strong> ${{ listing.starting_bid }}
-                        </p>
-                    </div>
-                </div>
-
-
-                <div class="mb-4">
-                    <p>{{ listing.description }}</p>
-                </div>
-
-                <!-- Place Bid -->
-                {% if user.is_authenticated %}
-                <!-- Place Bid Form -->
-                <div class="my-4">
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        <!-- Message Display -->
-                        {% if message %}
-                        <div class="alert alert-info" role="alert">{{ message }}</div>
-                        {% endif %}
-                        <label for="bid_amount" class="col-form-label">Place Your Bid</label>
-                        <div class="row align-items-center">
-                            <!-- Input Field -->
-                            <div class="col-md-8 py-2">
-                                <input type="number" class="form-control" id="bid_amount" name="bid_amount"
-                                    placeholder="Enter your bid amount" required />
-                            </div>
-                            <div class="col-md-4">
-                                <button class="btn btn-primary w-100" type="submit" name="place_bid">
-                                    Place Bid
-                                </button>
-                            </div>
-                        </div>
-                        <!-- Place Bid Button -->
-                    </form>
-                </div>
-
-                <!-- Watchlist and Close Auction Buttons -->
-                <div class="row mb-2">
-                    <!-- Add to Watchlist Button -->
-                    <div class="col-md-6">
-                        <form action="" method="post">
-                            {% csrf_token %}
-                            <button class="btn btn-outline-warning btn-lg w-100 mb-3" type="submit"
-                                name="toggle_watchlist">
-                                {% if on_watchlist %} Remove from Watchlist {% else %} Add to
-                                Watchlist {% endif %}
-                            </button>
-                        </form>
-                    </div>
-                    <!-- Close Auction Button -->
-                    <div class="col-md-6">
-                        {% if user == listing.owner and listing.status == 'active' %}
-                        <form action="" method="post">
-                            {% csrf_token %}
-                            <button class="btn btn-outline-secondary btn-lg w-100 mb-3" type="submit"
-                                name="close_auction">
-                                Close Auction
-                            </button>
-                        </form>
-                        {% endif %}
-                    </div>
-                </div>
-                {% endif %}
-            </div>
+            "
+          >
+            {% if listing.image_url %}
+            <img
+              src="{{ listing.image_url }}"
+              class="img-fluid"
+              style="max-width: 100%; max-height: 100%; object-fit: contain"
+              alt="{{ listing.title }}"
+            />
+            {% else %}
+            <img
+              src="{% static 'img/no-image.jpg' %}"
+              class="img-fluid"
+              style="max-width: 100%; max-height: 100%; object-fit: contain"
+              alt="Default Image"
+            />
+            {% endif %}
+          </div>
         </div>
+      </div>
+      <!-- Details -->
+      <div class="col-md-6">
+        <div class="mb-3">
+          <h2>{{ listing.title }}</h2>
+        </div>
+        <p class="h6 text-info-emphasis">
+          <strong>Current Highest Bid:</strong>
+          {% if current_bid %} ${{ current_bid.amount }} {% else %} No bids yet.
+          {% endif %}
+        </p>
+        <div>
+          <div class="mb-3">
+            <p class="h6 text-info-emphasis me-2">
+              <strong>Starting Bid:</strong> ${{ listing.starting_bid }}
+            </p>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <p>{{ listing.description }}</p>
+        </div>
+
+        <!-- Place Bid -->
+        {% if user.is_authenticated %}
+        <!-- Place Bid Form -->
+        <div class="my-4">
+          <form action="" method="post">
+            {% csrf_token %}
+            <!-- Message Display -->
+            {% if message %}
+            <div class="alert alert-info" role="alert">{{ message }}</div>
+            {% endif %}
+            <label for="bid_amount" class="col-form-label"
+              >Place Your Bid</label
+            >
+            <div class="row align-items-center">
+              <!-- Input Field -->
+              <div class="col-md-8 py-2">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="bid_amount"
+                  name="bid_amount"
+                  placeholder="Enter your bid amount"
+                  required
+                />
+              </div>
+              <div class="col-md-4">
+                <button
+                  class="btn btn-primary w-100"
+                  type="submit"
+                  name="place_bid"
+                >
+                  Place Bid
+                </button>
+              </div>
+            </div>
+            <!-- Place Bid Button -->
+          </form>
+        </div>
+
+        <!-- Watchlist and Close Auction Buttons -->
+        <div class="row mb-2">
+          <!-- Add to Watchlist Button -->
+          <div class="col-md-6">
+            <form action="" method="post">
+              {% csrf_token %}
+              <button
+                class="btn btn-outline-warning btn-lg w-100 mb-3"
+                type="submit"
+                name="toggle_watchlist"
+              >
+                {% if on_watchlist %} Remove from Watchlist {% else %} Add to
+                Watchlist {% endif %}
+              </button>
+            </form>
+          </div>
+          <!-- Close Auction Button -->
+          <div class="col-md-6">
+            {% if user == listing.owner and listing.status == 'active' %}
+            <form action="" method="post">
+              {% csrf_token %}
+              <button
+                class="btn btn-outline-secondary btn-lg w-100 mb-3"
+                type="submit"
+                name="close_auction"
+              >
+                Close Auction
+              </button>
+            </form>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
     </div>
+  </div>
 </section>
 
 <hr class="border-2" />
 
 <!-- Comments -->
 <section class="container mt-5">
-    <div class="mb-4">
-        <div class="d-flex gap-3">
-            <div class="flex-grow-1">
+  <div class="mb-4">
+    <div class="d-flex gap-3">
+      <div class="flex-grow-1">
+        <h3 class="mb-4">Comments</h3>
 
-
-                <h3 class="mb-4">Comments</h3>
-
-                <!-- Comments List -->
-                <div class="mb-4">
-                    {% for comment in comments %}
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <strong class="card-title">{{ comment.user.username }}</strong>
-                            <p class="card-text">{{ comment.content }}</p>
-                            <small class="text-muted">{{ comment.created_at|timesince }} ago</small>
-                        </div>
-                    </div>
-                    {% empty %}
-                    <div class="text-muted">No comments yet.</div>
-                    {% endfor %}
-                </div>
-
-                <!-- Comment Form -->
-                {% if user.is_authenticated %}
-                <form action="" method="post" class="mb-4">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="id_content" class="form-label">Add a Comment</label>
-                        <textarea name="content" id="id_content" class="form-control" rows="3"
-                            placeholder="Write your comment here..." required></textarea>
-                    </div>
-                    <button type="submit" name="comment_submit" class="btn btn-primary">
-                        Post Comment
-                    </button>
-                </form>
-                {% endif %}
+        <!-- Comments List -->
+        <div class="mb-4">
+          {% for comment in comments %}
+          <div class="card mb-3">
+            <div class="card-body">
+              <strong class="card-title">{{ comment.user.username }}</strong>
+              <p class="card-text">{{ comment.content }}</p>
+              <small class="text-muted"
+                >{{ comment.created_at|timesince }} ago</small
+              >
             </div>
+          </div>
+          {% empty %}
+          <div class="text-muted">No comments yet.</div>
+          {% endfor %}
         </div>
+
+        <!-- Comment Form -->
+        {% if user.is_authenticated %}
+        <form action="" method="post" class="mb-4">
+          {% csrf_token %}
+          <div class="mb-3">
+            <label for="id_content" class="form-label">Add a Comment</label>
+            <textarea
+              name="content"
+              id="id_content"
+              class="form-control"
+              rows="3"
+              placeholder="Write your comment here..."
+              required
+            ></textarea>
+          </div>
+          <button type="submit" name="comment_submit" class="btn btn-primary">
+            Post Comment
+          </button>
+        </form>
+        {% endif %}
+      </div>
     </div>
+  </div>
 </section>
 
 {% endblock %}

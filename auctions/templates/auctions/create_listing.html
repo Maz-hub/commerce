@@ -2,36 +2,37 @@
 {% load crispy_forms_tags %}
 
 {% block body%}
+
 <div class="container my-5">
-    <h2>Create New Listing</h2>
-    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="title" class="form-label"></label>
-            {{ form.title|as_crispy_field }}
-        </div>
+  <h2>Create New Listing</h2>
+  <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="title" class="form-label"></label>
+      {{ form.title|as_crispy_field }}
+    </div>
 
-        <div class="mb-3">
-            <label for="description" class="form-label"></label>
-            {{ form.description|as_crispy_field }}
-        </div>
+    <div class="mb-3">
+      <label for="description" class="form-label"></label>
+      {{ form.description|as_crispy_field }}
+    </div>
 
-        <div class="mb-3">
-            <label for="starting_bid" class="form-label"></label>
-            {{ form.starting_bid|as_crispy_field }}
-        </div>
+    <div class="mb-3">
+      <label for="starting_bid" class="form-label"></label>
+      {{ form.starting_bid|as_crispy_field }}
+    </div>
 
-        <div class="mb-3">
-            <label for="image_url" class="form-label"></label>
-            {{ form.image_url|as_crispy_field }}
-        </div>
+    <div class="mb-3">
+      <label for="image_url" class="form-label"></label>
+      {{ form.image_url|as_crispy_field }}
+    </div>
 
-        <div class="mb-3">
-            <label for="category" class="form-label"></label>
-            {{ form.category|as_crispy_field }}
-        </div>
+    <div class="mb-3">
+      <label for="category" class="form-label"></label>
+      {{ form.category|as_crispy_field }}
+    </div>
 
-        <button type="submit" class="btn btn-primary">Create</button>
-    </form>
+    <button type="submit" class="btn btn-primary">Create</button>
+  </form>
 </div>
 {% endblock %}

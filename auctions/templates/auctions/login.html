@@ -1,51 +1,62 @@
-{% extends "auctions/layout.html" %}
-
-{% block body %}
-
-{% if message %}
+{% extends "auctions/layout.html" %} {% block body %} {% if message %}
 <div>{{ message }}</div>
 {% endif %}
 
-
 <section>
-    <div class="container mt-5 pt-5">
-        <div class="row">
-            <div class="col-12 col-sm-8 col-md-6 m-auto">
-                <div class="card border-0 shadow rounded">
-                    <div class="card-header">
-                        <h3 class="text-center py-5">Sign in to your account</h3>
-                        <div class="card-body">
-                            <form action="{% url 'login' %}" method="post" class="form-signin">
-                                {% csrf_token %}
-                                <div class="form-outline mb-4">
-                                    <input autofocus class="form-control" type="text" name="username"
-                                        placeholder="Username" required>
-                                    <div class="invalid-feedback">
-                                        Please enter username.
-                                    </div>
-                                </div>
-                                <div class="form-outline mb-4">
-                                    <input class="form-control" type="password" name="password" placeholder="Password"
-                                        required>
-                                    <div class="invalid-feedback">
-                                        Please enter your password.
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-info btn-lg btn-block form-control">Login</button>
-
-                                <p class="mt-5 text-center">New to <span class="fw-bold text-warning">A</span>uctions?
-                                    <a href="{% url 'register' %}">Create account</a>
-                                </p>
-                            </form>
-                        </div>
-                    </div>
+  <div class="container mt-5 pt-5">
+    <div class="row">
+      <div class="col-12 col-sm-8 col-md-6 m-auto">
+        <div class="card border-0 shadow rounded">
+          <div class="card-header">
+            <h3 class="text-center py-5">Sign in to your account</h3>
+            <div class="card-body">
+              <form
+                action="{% url 'login' %}"
+                method="post"
+                class="form-signin"
+              >
+                {% csrf_token %}
+                <div class="form-outline mb-4">
+                  <input
+                    autofocus
+                    class="form-control"
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    required
+                  />
+                  <div class="invalid-feedback">Please enter username.</div>
                 </div>
+                <div class="form-outline mb-4">
+                  <input
+                    class="form-control"
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    required
+                  />
+                  <div class="invalid-feedback">
+                    Please enter your password.
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  class="btn btn-info btn-lg btn-block form-control"
+                >
+                  Login
+                </button>
+
+                <p class="mt-5 text-center">
+                  New to <span class="fw-bold text-warning">A</span>uctions?
+                  <a href="{% url 'register' %}">Create account</a>
+                </p>
+              </form>
             </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </section>
-
-
-
 
 {% endblock %}

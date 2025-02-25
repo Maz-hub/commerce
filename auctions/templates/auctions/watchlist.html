@@ -5,7 +5,6 @@
     {% for item in watchlist_items %}
     <div class="col-md-6 col-lg-4 mb-4">
       <div class="card h-100 shadow-sm">
-        <!-- Thumbnail Image -->
         {% if item.listing.image_url %}
         <img
           src="{{ item.listing.image_url }}"

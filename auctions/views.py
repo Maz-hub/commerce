@@ -125,7 +125,7 @@ def listing_detail(request, listing_id):
                     bid = Bid(listing=listing, user=request.user, amount=bid_amount)
                     bid.save()
                     message = "Your bid was successful!"
-                    current_bid = bid  # Update current bid to the new highest
+                    current_bid = bid
             else:
                 # Invalid form submission
                 message = "Invalid bid amount. Please enter a valid number."
@@ -170,7 +170,6 @@ def listing_detail(request, listing_id):
 
 def watchlist_view(request):
     if not request.user.is_authenticated:
-        # Redirect to login or show an error
         return redirect('login')
     
     # Get all watchlist items for the logged-in user
