@@ -106,6 +106,13 @@ def listing_detail(request, listing_id):
     
     # Initialize a variable for displaying messages to the user
     message = None
+    
+    # Check if the user is the winner of the auction
+    winner = None
+    if listing.status == 'closed' and request.user.is_authenticated:
+        highest_bid = Bid.objects.filter(listing=listing).order_by('-amount').first()
+        if highest_bid and highest_bid.user == request.user:
+            winner = request.user
 
     if request.method == 'POST':
         # Bid submissions
@@ -167,6 +174,7 @@ def listing_detail(request, listing_id):
         'current_bid': current_bid,
         'bid_form': bid_form if listing.status == 'active' else None,
         'message': message,
+        'winner': winner,
     })
 
 
