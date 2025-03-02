@@ -81,29 +81,28 @@
     <div class="container my-5">{% block body %}{% endblock %}</div>
 
     <!-- Footer -->
-    <footer
-      class="navbar navbar-expand-lg bg-primary ps-3 pe-5"
-      data-bs-theme="dark"
-    >
-      <div class="container-fluid">
+    <footer class="navbar bg-primary" data-bs-theme="dark">
+      <div
+        class="container-fluid px-lg-5 d-flex flex-column flex-lg-row justify-content-lg-between align-items-center text-center"
+      >
+        <!-- Categories Link -->
+        <ul class="navbar-nav mb-2 mb-lg-0 order-0 order-lg-1">
+          <li class="nav-item">
+            <a class="nav-link mx-auto mx-lg-0" href="{% url 'category_list' %}"
+              >Categories</a
+            >
+          </li>
+        </ul>
+        <!-- Logo -->
         <a
-          class="navbar-brand text-decoration-none fs-5"
+          class="navbar-brand text-decoration-none fs-5 mx-auto mx-lg-0 order-1 order-lg-0"
           href="{% url 'index' %}"
         >
           <span class="fw-bold text-warning">A</span>uctions
         </a>
-        <div class="collapse navbar-collapse" id="footerNav">
-          <ul class="navbar-nav ms-auto">
-            <!-- Categories Link -->
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'category_list' %}"
-                >Categories</a
-              >
-            </li>
-          </ul>
-        </div>
       </div>
     </footer>
+
     <section class="bg-light py-1">
       <div class="container-fluid text-center">
         <p class="mb-0">© 2025 Auctions. All rights reserved.</p>

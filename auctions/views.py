@@ -14,6 +14,10 @@ from .forms import ListingForm, BidForm, CommentForm
 def index(request):
     active_listings = Listing.objects.filter(status='active')
     categories = Category.objects.all()
+    # Annotate each listing with its current price
+    for listing in active_listings:
+        current_bid = Bid.objects.filter(listing=listing).order_by('-amount').first()
+        listing.current_price = current_bid.amount if current_bid else listing.starting_bid
     return render(request, 'auctions/index.html', {
         'listings': active_listings,
         'categories': categories 

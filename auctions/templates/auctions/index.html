@@ -81,8 +81,11 @@
             <!-- Card Body -->
             <div class="card-body d-flex flex-column">
               <p class="text-primary-emphasis">{{ listing.title }}</p>
+              <p class="text-body-tertiary">
+                {{ listing.description|truncatewords:10 }}
+              </p>
               <p class="text-primary">
-                <strong>Starting Bid:</strong> ${{ listing.starting_bid }}
+                <strong>Current Price:</strong> ${{ listing.current_price }}
               </p>
             </div>
           </div>
