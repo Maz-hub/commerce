@@ -106,7 +106,7 @@ def listing_detail(request, listing_id):
     
     # Initialize a variable for displaying messages to the user
     message = None
-    
+
     # Check if the user is the winner of the auction
     winner = None
     if listing.status == 'closed' and request.user.is_authenticated:
@@ -198,6 +198,9 @@ def category_list(request):
 def category_detail(request, category_id):
     category = get_object_or_404(Category, pk=category_id)
     listings = Listing.objects.filter(category=category, status='active')
+    for listing in listings:
+        current_bid = Bid.objects.filter(listing=listing).order_by('-amount').first()
+        listing.current_price = current_bid.amount if current_bid else listing.starting_bid
     return render(request, 'auctions/category_detail.html', {'category': category, 'listings': listings})
 
 
